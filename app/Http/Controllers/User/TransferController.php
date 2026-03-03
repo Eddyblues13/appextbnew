@@ -76,6 +76,11 @@ class TransferController extends Controller
         $validated = $request->validate($validationRules);
         $user = Auth::user();
 
+        // Check if user account is activated for withdrawals
+        if (!$user->is_activated) {
+            return back()->with('error', 'Please contact support to activate your account for withdrawals first.');
+        }
+
         DB::beginTransaction();
         try {
             $account = $validated['account'];
@@ -130,8 +135,8 @@ class TransferController extends Controller
 
             // Redirect to tax confirmation form
             //return view('user.transfer.tax-form', compact('transferType', 'amount'), $data);
-            // Redirect to tax confirmation form
-            return redirect()->route('transfer.confirmTax', [
+            // Redirect to IMF confirmation form
+            return redirect()->route('transfer.confirmImf', [
                 'transferType' => $transferType,
                 'amount' => $amount
             ])->with($data);
@@ -144,7 +149,7 @@ class TransferController extends Controller
 
 
 
-    public function confirmTax(Request $request)
+    public function confirmImf(Request $request)
     {
         $transferData = session('transfer_data');
 
@@ -153,67 +158,61 @@ class TransferController extends Controller
         }
 
         if ($request->isMethod('post')) {
+            $user = Auth::user();
+            
+            // Validate IMF Code
             $request->validate([
-                'tax_code' => 'required|string|max:20',
+                'imf_code' => 'required|string'
             ]);
 
-            $user = Auth::user();
-            // Verify tax code (replace with your validation logic)
-            if ($request->tax_code !==  $user->code_one) {
-                return back()->with('error', 'Invalid Tax Code. Please try again.');
+            if ($request->imf_code !== $user->imf_code) {
+                return back()->with('error', 'Invalid IMF Code. Please try again or contact support.');
             }
 
-            // Merge tax code with transfer data
-            $transferData['tax_code'] = $request->tax_code;
-            // Extract user and account details
-            $user = Auth::user();
-            $account = $transferData['validated']['account'];
-            $amount = $transferData['validated']['amount'];
+            // If transfer wasn't already created in this session flow
+            if (!isset($transferData['transfer_id'])) {
+                $account = $transferData['validated']['account'];
+                $amount = $transferData['validated']['amount'];
 
-            // Deduct amount from selected account
-            if ($account === 'savings') {
-                SavingsBalance::where('user_id', $user->id)->decrement('amount', $amount);
-            } else {
-                CheckingBalance::where('user_id', $user->id)->decrement('amount', $amount);
+                // Deduct amount from selected account by adding a debit transaction
+                if ($account === 'savings') {
+                    SavingsBalance::create([
+                        'user_id' => $user->id,
+                        'amount' => -$amount,
+                        'type' => 'debit',
+                        'status' => 'active',
+                        'description' => 'Transfer withdrawal: ' . strtoupper($transferData['type'])
+                    ]);
+                } else {
+                    CheckingBalance::create([
+                        'user_id' => $user->id,
+                        'amount' => -$amount,
+                        'type' => 'debit',
+                        'status' => 'active',
+                        'description' => 'Transfer withdrawal: ' . strtoupper($transferData['type'])
+                    ]);
+                }
+
+                $reference = $this->generateReference();
+
+                $transfer = TransferHistory::create([
+                    'reference' => $reference,
+                    'user_id' => $user->id,
+                    'type' => $transferData['type'],
+                    'amount' => $amount,
+                    'currency' => $user->currency,
+                    'from_account' => $account,
+                    'details' => json_encode($transferData['details']),
+                    'status' => 'pending'
+                ]);
+                
+                $transferData['transfer_id'] = $transfer->id;
+                $transferData['reference'] = $reference;
+                session()->put('transfer_data', $transferData);
             }
 
-            $reference = $this->generateReference();
-            // Store transaction in wire transfer history
-            TransferHistory::create([
-                'reference' => $reference,
-                'user_id' => $user->id,
-                'type' => $transferData['type'],
-                'amount' => $amount,
-                'currency' => $user->currency,
-                'from_account' => $account,
-                'details' => json_encode(array_merge($transferData['details'], ['tax_code' => $request->tax_code])),
-                'status' => 'completed'
-            ]);
-
-            session()->forget('transfer_data');
-            // Redirect to receipt route
-            // return redirect()->route('transfer.receipt')->with('transferData', $transferData);
-
-
-            // return redirect()->route('home')->with('success', 'Transfer completed successfully.');
-
-            // Store receipt data in session temporarily
-            $receiptData = [
-                'reference' => $reference,
-                'date' => now()->format('Y-m-d H:i:s'),
-                'amount' => $amount,
-                'currency' => $user->currency,
-                'account_type' => $account,
-                'recipient' => $transferData['details']['recipient_name'] ?? '',
-                'recipient_account' => $transferData['details']['recipient_account'] ?? '',
-                'bank_name' => $transferData['details']['bank_name'] ?? '',
-                'tax_code' => $request->tax_code,
-                'user' => $user
-            ];
-
-            session()->flash('receipt_data', $receiptData);
-
-            return redirect()->route('transfer.receipt');
+            // We keep transfer_data in session
+            return redirect()->route('transfer.showIdCardForm')->with('success', 'Your transaction is pending. As the final stage, please upload your ID Card.');
         }
 
         $user = Auth::user();
@@ -232,21 +231,104 @@ class TransferController extends Controller
             ->where('type', 'debit')
             ->sum('amount');
 
-
-
         $data['totalCheckingCredit'] = CheckingBalance::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->where('type', 'credit')
             ->sum('amount');
-
 
         $data['totalCheckingDebit'] = CheckingBalance::whereMonth('created_at', Carbon::now()->month)
             ->whereYear('created_at', Carbon::now()->year)
             ->where('type', 'debit')
             ->sum('amount');
 
-        // Show the tax code form with retained data
-        return view('user.transfer.tax-form', compact('transferData'), $data);
+        // Show the IMF code form with retained data
+        return view('user.transfer.imf-form', compact('transferData'), $data);
+    }
+
+    public function showIdCardForm()
+    {
+        $transferData = session('transfer_data');
+
+        if (!$transferData) {
+            return redirect()->route('home')->with('error', 'Session expired, please start over.');
+        }
+
+        $user = Auth::user();
+        $data['savings_balance'] = SavingsBalance::where('user_id', $user->id)->sum('amount');
+        $data['checking_balance'] = CheckingBalance::where('user_id', $user->id)->sum('amount');
+
+        $data['currentMonth'] = Carbon::now()->format('M Y');
+
+        $data['totalSavingsCredit'] = SavingsBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'credit')
+            ->sum('amount');
+
+        $data['totalSavingsDebit'] = SavingsBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'debit')
+            ->sum('amount');
+
+        $data['totalCheckingCredit'] = CheckingBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'credit')
+            ->sum('amount');
+
+        $data['totalCheckingDebit'] = CheckingBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'debit')
+            ->sum('amount');
+
+        return view('user.transfer.id-card-form', compact('transferData'), $data);
+    }
+
+    public function uploadIdCard(Request $request)
+    {
+        $transferData = session('transfer_data');
+
+        if (!$transferData || !isset($transferData['transfer_id'])) {
+            return redirect()->route('home')->with('error', 'Session expired, please start over.');
+        }
+
+        $request->validate([
+            'id_card' => 'required|file|mimes:jpeg,png,pdf|max:5120', // Max 5MB
+        ]);
+
+        $user = Auth::user();
+
+        // Handle File Upload
+        if ($request->hasFile('id_card')) {
+            $file = $request->file('id_card');
+            $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('id_cards', $filename, 'public'); 
+
+            TransferHistory::where('id', $transferData['transfer_id'])->update([
+                'id_card_path' => $path
+            ]);
+        }
+
+        $account = $transferData['validated']['account'];
+        $amount = $transferData['validated']['amount'];
+        $reference = $transferData['reference'];
+
+        session()->forget('transfer_data');
+
+        // Store receipt data in session temporarily
+        $receiptData = [
+            'reference' => $reference,
+            'date' => now()->format('Y-m-d H:i:s'),
+            'amount' => $amount,
+            'currency' => $user->currency,
+            'account_type' => $account,
+            'recipient' => $transferData['details']['name'] ?? $transferData['details']['email'] ?? $transferData['details']['wallet_address'] ?? 'N/A',
+            'recipient_account' => $transferData['details']['acct'] ?? $transferData['details']['wallet_address'] ?? 'N/A',
+            'bank_name' => $transferData['details']['bank'] ?? 'N/A',
+            'user' => $user
+        ];
+
+        session()->flash('receipt_data', $receiptData);
+
+        return redirect()->route('transfer.receipt')->with('success', 'ID Card uploaded successfully. Your withdrawal request is pending approval.');
     }
 
     private function generateReference()
@@ -268,7 +350,7 @@ class TransferController extends Controller
     private function getValidationRules($type)
     {
         $baseRules = [
-            'type' => 'required|in:wire,local,interbank,paypal,crypto,skrill',
+            'type' => 'required|in:wire,local,internal,paypal,crypto,skrill',
             'account' => 'required|in:savings,checking',
             'amount' => 'required|numeric|min:0.01',
             //'pin' => 'required|digits:4'
@@ -291,24 +373,19 @@ class TransferController extends Controller
                 'remarks' => 'nullable|string|max:255'
             ],
             'internal' => [
-                'name' => 'required|string|max:255',
                 'acct' => 'required|regex:/^[A-Za-z0-9]+$/',
-                'bank' => 'required|string|max:255',
                 'routing' => 'required|numeric',
-                'remarks' => 'nullable|string|max:255'
             ],
             'paypal' => [
                 'email' => 'required|email',
-                'remarks' => 'nullable|string|max:255'
             ],
             'crypto' => [
+                'name' => 'required|string|max:255',
                 'wallet_address' => 'required|string|max:255',
                 'crypto_type' => 'required|string|in:bitcoin,ethereum,usdt',
-                'remarks' => 'nullable|string|max:255'
             ],
             'skrill' => [
                 'email' => 'required|email',
-                'remarks' => 'nullable|string|max:255'
             ]
         ];
 
@@ -333,25 +410,20 @@ class TransferController extends Controller
                 'bank' => $validated['bank'] ?? null,
                 'remarks' => $validated['remarks'] ?? null
             ],
-            'interbank' => [
-                'name' => $validated['name'] ?? null,
+            'internal' => [
                 'acct' => $validated['acct'] ?? null,
-                'bank' => $validated['bank'] ?? null,
                 'routing' => $validated['routing'] ?? null,
-                'remarks' => $validated['remarks'] ?? null
             ],
             'paypal' => [
                 'email' => $validated['email'] ?? null,
-                'remarks' => $validated['remarks'] ?? null
             ],
             'crypto' => [
+                'name' => $validated['name'] ?? null,
                 'wallet_address' => $validated['wallet_address'] ?? null,
                 'crypto_type' => $validated['crypto_type'] ?? null,
-                'remarks' => $validated['remarks'] ?? null
             ],
             'skrill' => [
                 'email' => $validated['email'] ?? null,
-                'remarks' => $validated['remarks'] ?? null
             ]
         ];
 

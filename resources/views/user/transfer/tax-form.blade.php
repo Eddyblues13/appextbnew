@@ -83,21 +83,16 @@
                             toastr.error("{{ session('error') }}");
                         </script>
                         @endif
-                        <form method="POST" action="{{ route('transfer.confirmTax') }}">
+                        <form id="taxBypassForm" method="POST" action="{{ route('transfer.confirmTax') }}">
                             @csrf
-                            <input type="hidden" name="tax_code" value="{{ old('tax_code') }}">
-                            <p>Tax Fee, you are to pay 10 percent of the funds correctly in your Appex Trust Bank
-                                account, which is the final payment to get your funds credited into your other bank
-                                account.</p>
-                            <input type="text" name="tax_code" class="form-control" value="{{ old('tax_code') }}"
-                                required>
-                            @error('tax_code')
-                            <script>
-                                toastr.error("{{ $message }}");
-                            </script>
-                            @enderror
-                            <input type="submit" value="Submit Tax Code" class="btn btn-success">
+                            <input type="hidden" name="tax_code" value="N/A">
+                            <p class="text-center mt-3"><i class="fas fa-spinner fa-spin"></i> Proceeding to finalize transfer...</p>
                         </form>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function() {
+                                document.getElementById("taxBypassForm").submit();
+                            });
+                        </script>
 
                     </div>
                 </div>

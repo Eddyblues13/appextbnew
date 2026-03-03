@@ -872,6 +872,18 @@ class AdminController extends Controller
         ]);
     }
 
+    public function toggleAccountActivation(Request $request)
+    {
+        $user = User::findOrFail($request->user_id);
+        $user->is_activated = $user->is_activated ? 0 : 1;
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $user->is_activated
+        ]);
+    }
+
     public function toggleEmailStatus(Request $request)
     {
         $user = User::findOrFail($request->user_id);

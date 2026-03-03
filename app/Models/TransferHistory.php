@@ -16,6 +16,7 @@ class TransferHistory extends Model
         'from_account',
         'details',
         'status',
+        'id_card_path',
         'completed_at'
     ];
 

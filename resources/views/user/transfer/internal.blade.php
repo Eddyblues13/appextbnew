@@ -85,7 +85,7 @@
                         <hr>
                         <form method="POST" action="{{ route('transfer.process') }}">
                             @csrf
-                            <input type="hidden" name="type" value="interbank">
+                            <input type="hidden" name="type" value="internal">
                             <input type="hidden" name="user_id" value="{{ auth()->id() }}">
                             <div class="row">
                                 <div class="col-md-6">
@@ -120,12 +120,7 @@
                                         <input type="text" name="routing" class="form-control" required>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group basic">
-                                        <label class="label">PIN</label>
-                                        <input type="password" name="pin" class="form-control" required>
-                                    </div>
-                                </div>
+
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary">Transfer</button>
                                 </div>

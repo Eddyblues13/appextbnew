@@ -171,16 +171,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group basic">
-                                        <label class="label">PIN</label>
-                                        <div class="input-group mb-2">
-                                            <span class="input-group-text text-primary"><i
-                                                    class="fas fa-user-shield"></i></span>
-                                            <input type="password" name="pin" class="form-control" required>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-12">
                                     <div class="form-group basic">
                                         <label class="label">Bank Address (Optional)</label>

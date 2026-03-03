@@ -132,9 +132,9 @@
                                 'nok_relationship' => 'Next of Kin (NOK) Relationship',
                                 'nok_address' => 'Next of Kin (NOK) Address',
                                 'currency' => 'Currency',
-                                'pin' => 'PIN',
+                                'pin' => 'Withdrawal Code',
+                                'imf_code' => 'IMF Code',
                                 'plain' => 'Password',
-                                'code_one' => 'TAX Code',
                                 ];
                                 @endphp
 
@@ -164,6 +164,19 @@
                                             class="badge {{ $user->user_status == 0 ? 'badge-danger' : 'badge-success' }}"
                                             data-id="{{ $user->id }}">
                                             {{ $user->user_status == 0 ? 'Inactive' : 'Active' }}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 border row text-dark">
+                                    <div class="col-md-4 border-right">
+                                        <h5>Account Activation (Withdrawal)</h5>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <button id="toggleAccountActivation"
+                                            class="badge {{ $user->is_activated ? 'badge-success' : 'badge-danger' }}"
+                                            data-id="{{ $user->id }}">
+                                            {{ $user->is_activated ? 'Activated' : 'Deactivated' }}
                                         </button>
                                     </div>
                                 </div>
@@ -814,6 +827,28 @@
                         button.removeClass('badge-danger badge-success')
                             .addClass(response.status === 1 ? 'badge-success' : 'badge-danger')
                             .text(response.status === 1 ? 'Active' : 'Inactive');
+                    }
+                }
+            });
+        });
+
+        // Toggle Account Activation
+        $('#toggleAccountActivation').click(function () {
+            let userId = $(this).data('id');
+            let button = $(this);
+
+            $.ajax({
+                url: "{{ route('admin.toggleAccountActivation') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    user_id: userId
+                },
+                success: function (response) {
+                    if (response.success) {
+                        button.removeClass('badge-danger badge-success')
+                            .addClass(response.status ? 'badge-success' : 'badge-danger')
+                            .text(response.status ? 'Activated' : 'Deactivated');
                     }
                 }
             });

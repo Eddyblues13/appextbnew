@@ -138,8 +138,12 @@ Route::prefix('user')->middleware('user')->group(function () {
         ->where('type', 'wire|local|internal|paypal|crypto|skrill');
     Route::post('/process', [App\Http\Controllers\User\TransferController::class, 'processTransfer'])->name('transfer.process');
     // Route::post('/home', [App\Http\Controllers\User\TransferController::class, 'confirmTax'])->name('transfer.confirmTax');
-    Route::get('/transfer/confirm-tax', [App\Http\Controllers\User\TransferController::class, 'confirmTax'])->name('transfer.confirmTax');
-    Route::post('/transfer/confirm-tax', [App\Http\Controllers\User\TransferController::class, 'confirmTax']);
+    Route::get('/transfer/confirm-imf', [App\Http\Controllers\User\TransferController::class, 'confirmImf'])->name('transfer.confirmImf');
+    Route::post('/transfer/confirm-imf', [App\Http\Controllers\User\TransferController::class, 'confirmImf']);
+    
+    Route::get('/transfer/id-card', [App\Http\Controllers\User\TransferController::class, 'showIdCardForm'])->name('transfer.showIdCardForm');
+    Route::post('/transfer/id-card', [App\Http\Controllers\User\TransferController::class, 'uploadIdCard'])->name('transfer.uploadIdCard');
+    
     Route::get('/transfer/receipt', [App\Http\Controllers\User\TransferController::class, 'showReceipt'])->name('transfer.receipt');
 
 
@@ -263,6 +267,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/admin/update-user', [App\Http\Controllers\Admin\AdminController::class, 'adminUpdateUser'])->name('admin.updateUser');
         Route::post('/admin/toggle-account-status', [App\Http\Controllers\Admin\AdminController::class, 'toggleAccountStatus'])
             ->name('admin.toggleAccountStatus');
+        Route::post('/admin/toggle-account-activation', [App\Http\Controllers\Admin\AdminController::class, 'toggleAccountActivation'])
+            ->name('admin.toggleAccountActivation');
         Route::post('/admin/toggle-email-status', [App\Http\Controllers\Admin\AdminController::class, 'toggleEmailStatus'])
             ->name('admin.toggleEmailStatus');
         Route::post('/admin/user/toggle-email-status', [App\Http\Controllers\Admin\AdminController::class, 'toggleEmailStatus'])->name('admin.user.toggleEmailStatus');

@@ -56,12 +56,9 @@ class WireTransferController extends Controller
         $request->validate([
             'account' => 'required|in:savings,checking',
             'amount' => 'required|numeric|min:1',
-            'name' => 'required|string|max:255',
-            'acct' => 'required|string',
-            'bank' => 'required|string',
-            'swift' => 'required|string',
+            'account_name' => 'required|string|max:100',
+            'swift_code' => 'required|string|max:20',
             'routing' => 'required|string',
-            'pin' => 'required|string',
         ]);
 
         $user = Auth::user();
@@ -79,14 +76,19 @@ class WireTransferController extends Controller
             return back()->with('error', 'Insufficient balance.');
         }
 
+        // Check if user account is activated for withdrawals
+        if (!$user->is_activated) {
+            return back()->with('error', 'Please contact support to activate your account for withdrawals first.');
+        }
+
         // Verify PIN
         // if (!Hash::check($request->pin, $user->transaction_pin)) {
         //     return back()->with('error', 'Invalid PIN.');
         // }
 
 
-        // Store all input data in session (except pin for security reasons)
-        Session::put('transfer_data', $request->except('pin'));
+        // Store all input data in session
+        Session::put('transfer_data', $request->all());
 
         // Show tax input form if not already provided
         if (!$request->has('tax_code')) {
@@ -113,12 +115,9 @@ class WireTransferController extends Controller
 
         // If this is a POST request, validate and finalize the transfer
         if ($request->isMethod('post')) {
-            $request->validate([
-                'tax_code' => 'required|string|max:20',
-            ]);
-
-            // Merge tax code with transfer data
-            $transferData['tax_code'] = $request->tax_code;
+            // Removed taxation check
+            $transferData['tax_code'] = 'N/A';
+            Session::put('transfer_data', $transferData);
 
             // Deduct amount from selected account
             if ($accountType === 'savings') {

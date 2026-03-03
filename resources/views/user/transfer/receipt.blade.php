@@ -124,7 +124,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-500">Tax Identification</p>
-                                <p class="text-gray-900 mt-1">{{ $receiptData['tax_code'] }}</p>
+                                <p class="text-gray-900 mt-1">{{ $receiptData['tax_code'] ?? 'N/A' }}</p>
                             </div>
                         </div>
                     </div>
@@ -185,7 +185,12 @@
                         </div>
                         <p class="text-xs text-gray-600">Secured with 256-bit SSL encryption</p>
                     </div>
-                    <div class="flex space-x-3">
+                    <div class="flex space-x-3 flex-wrap justify-end gap-y-2">
+                        <a href="{{ route('home') }}"
+                            class="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition flex items-center">
+                            <i class="fas fa-home mr-2"></i>
+                            Return Home
+                        </a>
                         <button onclick="window.print()"
                             class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition flex items-center">
                             <i class="fas fa-print mr-2"></i>
