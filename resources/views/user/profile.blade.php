@@ -31,7 +31,7 @@
                     <div class="in">
                         <div>Checkings Balance</div>
                         <span class="text-primary">
-                            {{ number_format($checking_balance, 2) }}
+                            {{ Auth::user()->currency }}{{ number_format($checking_balance, 2) }}
                         </span>
                     </div>
                 </a>
@@ -41,7 +41,7 @@
                     <div class="in">
                         <div>Savings Balance</div>
                         <span class="text-primary">
-                            {{ number_format($savings_balance, 2) }}
+                            {{ Auth::user()->currency }}{{ number_format($savings_balance, 2) }}
                         </span>
                     </div>
                 </a>

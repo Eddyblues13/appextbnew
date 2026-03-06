@@ -12,7 +12,7 @@
                             <div class="card-main">
                                 <div class="balance"> <span class="label">SAVINGS</span>
                                     <h1 class="title">
-                                        {{ number_format($savings_balance, 2) }} </h1>
+                                        {{ Auth::user()->currency }}{{ number_format($savings_balance, 2) }} </h1>
                                 </div>
                                 <div class="in">
                                     <div class="card-number"> <span class="label">Account Number</span>
@@ -21,11 +21,11 @@
                                     <div class="bottom">
                                         <div class="card-expiry">
                                             <span class="label">Total Credit <br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalSavingsCredit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalSavingsCredit, 2) }}
                                         </div>
                                         <div class="card-ccv">
                                             <span class="label">Total Debit<br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalSavingsDebit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalSavingsDebit, 2) }}
                                         </div>
                                     </div>
                                 </div>
@@ -39,7 +39,7 @@
                             <div class="card-main">
                                 <div class="balance"> <span class="label">CHECKINGS</span>
                                     <h1 class="title">
-                                        {{ number_format($checking_balance, 2) }} </h1>
+                                        {{ Auth::user()->currency }}{{ number_format($checking_balance, 2) }} </h1>
                                 </div>
                                 <div class="in">
                                     <div class="card-number"> <span class="label">Account Number</span>
@@ -48,11 +48,11 @@
                                     <div class="bottom">
                                         <div class="card-expiry">
                                             <span class="label">Total Credit <br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalCheckingCredit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalCheckingCredit, 2) }}
                                         </div>
                                         <div class="card-ccv">
                                             <span class="label">Total Debit<br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalCheckingDebit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalCheckingDebit, 2) }}
                                         </div>
                                     </div>
 
@@ -89,17 +89,17 @@
                                     <select class="form-control custom-select" name="account" required>
                                         <option value=""></option>
                                         <option value="savings" {{ old('account')=='savings' ? 'selected' : '' }}>
-                                            Savings (*** 0260) - $1,034,087.00
+                                            Savings (*** 0260) - {{ Auth::user()->currency }}{{ number_format($savings_balance, 2) }}
                                         </option>
                                         <option value="checking" {{ old('account')=='checking' ? 'selected' : '' }}>
-                                            Checking (*** 0942) - $243,787.00
+                                            Checking (*** 0942) - {{ Auth::user()->currency }}{{ number_format($checking_balance, 2) }}
                                         </option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-group basic">
-                                <label class="label">Amount ($)</label>
+                                <label class="label">Amount ({{ Auth::user()->currency }})</label>
                                 <div class="input-group mb-2">
                                     <input type="number" name="amount" class="form-control" value="{{ old('amount') }}"
                                         required>

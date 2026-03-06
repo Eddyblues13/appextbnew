@@ -11,7 +11,7 @@
                             <div class="card-main">
                                 <div class="balance"> <span class="label">SAVINGS</span>
                                     <h1 class="title">
-                                        {{ number_format($savings_balance, 2) }} </h1>
+                                        {{ Auth::user()->currency }}{{ number_format($savings_balance, 2) }} </h1>
                                 </div>
                                 <div class="in">
                                     <div class="card-number"> <span class="label">Account Number</span>
@@ -20,11 +20,11 @@
                                     <div class="bottom">
                                         <div class="card-expiry">
                                             <span class="label">Total Credit <br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalSavingsCredit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalSavingsCredit, 2) }}
                                         </div>
                                         <div class="card-ccv">
                                             <span class="label">Total Debit<br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalSavingsDebit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalSavingsDebit, 2) }}
                                         </div>
                                     </div>
                                 </div>
@@ -38,7 +38,7 @@
                             <div class="card-main">
                                 <div class="balance"> <span class="label">CHECKINGS</span>
                                     <h1 class="title">
-                                        {{ number_format($checking_balance, 2) }} </h1>
+                                        {{ Auth::user()->currency }}{{ number_format($checking_balance, 2) }} </h1>
                                 </div>
                                 <div class="in">
                                     <div class="card-number"> <span class="label">Account Number</span>
@@ -47,11 +47,11 @@
                                     <div class="bottom">
                                         <div class="card-expiry">
                                             <span class="label">Total Credit <br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalCheckingCredit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalCheckingCredit, 2) }}
                                         </div>
                                         <div class="card-ccv">
                                             <span class="label">Total Debit<br> {{ $currentMonth }}</span>
-                                            ${{ number_format($totalCheckingDebit, 2) }}
+                                            {{ Auth::user()->currency }}{{ number_format($totalCheckingDebit, 2) }}
                                         </div>
                                     </div>
 
