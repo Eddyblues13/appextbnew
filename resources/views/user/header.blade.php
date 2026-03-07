@@ -19,8 +19,8 @@
     <meta property="og:image" content="uploads/logo.png" />
     <link rel="canonical" href="https://appextb.com">
     <!-- favicon & bookmark -->
-    <link rel="apple-touch-icon" sizes="144x144" href="uploads/logo.png">
-    <link rel="shortcut icon" href="uploads/logo.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('uploads/logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('uploads/logo.png') }}">
 
     <meta name="robots" content="index, follow" />
     <!-- Chrome, Firefox OS and Opera -->

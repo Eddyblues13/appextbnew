@@ -1,12 +1,12 @@
 <footer class="footer-wrap bg-rock">
     <div class="container">
-        <img src="asset/img/footer-shape-1.png" alt="Image" class="footer-shape-one">
-        <img src="asset/img/footer-shape-2.png" alt="Image" class="footer-shape-two">
+        <img src="{{ asset('asset/img/footer-shape-1.png') }}" alt="Image" class="footer-shape-one">
+        <img src="{{ asset('asset/img/footer-shape-2.png') }}" alt="Image" class="footer-shape-two">
         <div class="row pt-100 pb-75">
             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
                 <div class="footer-widget">
                     <a href="{{url('/')}}" class="footer-logo">
-                        <img src="asset/img/logo-white.png" alt="Image" width="150">
+                        <img src="{{ asset('asset/img/logo-white.png') }}" alt="Image" width="150">
                     </a>
                     <p class="comp-desc">
                         Our Fixed/Tenured Deposits offer the best long-term saving options for you and your
@@ -104,17 +104,17 @@
 <a href="javascript:void(0)" class="back-to-top bounce"><i class="ri-arrow-up-s-line"></i></a>
 
 
-<script src="asset/js/jquery.min.js"></script>
-<script src="asset/js/bootstrap.bundle.min.js"></script>
-<script src="asset/js/form-validator.min.js"></script>
-<script src="asset/js/contact-form-script.js"></script>
-<script src="asset/js/aos.js"></script>
-<script src="asset/js/owl.carousel.min.js"></script>
-<script src="asset/js/odometer.min.js"></script>
-<script src="asset/js/fancybox.js"></script>
-<script src="asset/js/jquery.appear.js"></script>
-<script src="asset/js/tweenmax.min.js"></script>
-<script src="asset/js/main.js"></script>
+<script src="{{ asset('asset/js/jquery.min.js') }}"></script>
+<script src="{{ asset('asset/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('asset/js/form-validator.min.js') }}"></script>
+<script src="{{ asset('asset/js/contact-form-script.js') }}"></script>
+<script src="{{ asset('asset/js/aos.js') }}"></script>
+<script src="{{ asset('asset/js/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('asset/js/odometer.min.js') }}"></script>
+<script src="{{ asset('asset/js/fancybox.js') }}"></script>
+<script src="{{ asset('asset/js/jquery.appear.js') }}"></script>
+<script src="{{ asset('asset/js/tweenmax.min.js') }}"></script>
+<script src="{{ asset('asset/js/main.js') }}"></script>
 
 
 </body>

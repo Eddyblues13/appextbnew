@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
 
-    <link rel="stylesheet" href="asset/css/bootstrap.min.css">
-    <link rel="stylesheet" href="asset/css/flaticon.css">
-    <link rel="stylesheet" href="asset/css/remixicon.css">
-    <link rel="stylesheet" href="asset/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="asset/css/odometer.min.css">
-    <link rel="stylesheet" href="asset/css/fancybox.css">
-    <link rel="stylesheet" href="asset/css/aos.css">
-    <link rel="stylesheet" href="asset/css/style.css">
-    <link rel="stylesheet" href="asset/css/dark-theme.css">
-    <link rel="stylesheet" href="asset/css/responsive.css">
+    <link rel="stylesheet" href="{{ asset('asset/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/remixicon.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/odometer.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/fancybox.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/aos.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/dark-theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/css/responsive.css') }}">
     <title> Appex Trust Bank- Money Transfer & Banking</title>
-    <link rel="icon" type="image/png" href="asset/img/favicon.png">
+    <link rel="icon" type="image/png" href="{{ asset('asset/img/favicon.png') }}">
 
 <!-- Smartsupp Live Chat script -->
 <script type="text/javascript">
@@ -79,8 +79,8 @@ window.smartsupp||(function(d) {
                 <div class="container">
                     <nav class="navbar navbar-expand-md navbar-light">
                         <a class="navbar-brand" href="{{url('/')}}">
-                            <img class="logo-light" src="asset/img/logo.png" alt="logo" width="160">
-                            <img class="logo-dark" src="asset/img/logo-white.png" alt="logo" width="160">
+                            <img class="logo-light" src="{{ asset('asset/img/logo.png') }}" alt="logo" width="160">
+                            <img class="logo-dark" src="{{ asset('asset/img/logo-white.png') }}" alt="logo" width="160">
                         </a>
                         <script data-cfasync="false"
                             src="cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
