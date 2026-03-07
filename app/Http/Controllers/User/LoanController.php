@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\SavingsBalance;
+use App\Models\CheckingBalance;
+use Carbon\Carbon;
 
 class LoanController extends Controller
 {
@@ -32,7 +35,33 @@ class LoanController extends Controller
 
     public function index()
     {
-        $loans = Loan::where('user_id', Auth::id())->latest()->get();
-        return view('user.loan', compact('loans'));
+        $user = Auth::user();
+        $data['loans'] = Loan::where('user_id', $user->id)->latest()->get();
+        $data['savings_balance'] = SavingsBalance::where('user_id', $user->id)->sum('amount');
+        $data['checking_balance'] = CheckingBalance::where('user_id', $user->id)->sum('amount');
+
+        $data['currentMonth'] = Carbon::now()->format('M Y'); 
+
+        $data['totalSavingsCredit'] = SavingsBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'credit')
+            ->sum('amount');
+
+        $data['totalSavingsDebit'] = SavingsBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'debit')
+            ->sum('amount');
+
+        $data['totalCheckingCredit'] = CheckingBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'credit')
+            ->sum('amount');
+
+        $data['totalCheckingDebit'] = CheckingBalance::whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->where('type', 'debit')
+            ->sum('amount');
+
+        return view('user.loan', $data);
     }
 }

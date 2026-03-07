@@ -92,7 +92,36 @@ class WireTransferController extends Controller
 
         // Show tax input form if not already provided
         if (!$request->has('tax_code')) {
-            return view('user.transfer.tax-form', ['requestData' => $request->all()]);
+            $data['savings_balance'] = SavingsBalance::where('user_id', $user->id)->sum('amount');
+            $data['checking_balance'] = CheckingBalance::where('user_id', $user->id)->sum('amount');
+
+            $data['currentMonth'] = Carbon::now()->format('M Y'); // Example: "Feb 2025"
+
+            $data['totalSavingsCredit'] = SavingsBalance::where('user_id', $user->id)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->where('type', 'credit')
+                ->sum('amount');
+
+            $data['totalSavingsDebit'] = SavingsBalance::where('user_id', $user->id)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->where('type', 'debit')
+                ->sum('amount');
+
+            $data['totalCheckingCredit'] = CheckingBalance::where('user_id', $user->id)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->where('type', 'credit')
+                ->sum('amount');
+
+            $data['totalCheckingDebit'] = CheckingBalance::where('user_id', $user->id)
+                ->whereMonth('created_at', Carbon::now()->month)
+                ->whereYear('created_at', Carbon::now()->year)
+                ->where('type', 'debit')
+                ->sum('amount');
+
+            return view('user.transfer.tax-form', ['requestData' => $request->all()] + $data);
         }
     }
 
