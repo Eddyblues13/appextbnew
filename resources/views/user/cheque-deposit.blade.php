@@ -145,12 +145,12 @@
                             }
 
                             .mk-icon-visa {
-                                background-image: url('assets/images/visa.png');
+                                background-image: url('https://cdn-icons-png.flaticon.com/512/349/349221.png');
                                 background-size: 40px;
                             }
 
                             .mk-icon-sim {
-                                background-image: url('assets/images/chip.png');
+                                background-image: url('https://cdn-icons-png.flaticon.com/512/6404/6404100.png');
                                 height: 30px;
                             }
 
@@ -287,7 +287,7 @@
                         <div class="wrapper">
                             <div class="credit-card-wrap">
                                 <div class="credit-card-inner">
-                                    <img src="https://appextb.com/uploads/logo.png" class="pull-right sitelogo">
+                                    <img src="{{ asset('uploads/logo.png') }}" class="pull-right sitelogo">
                                     <div class="mk-icon-sim"></div>
                                     <div class="credit-font credit-card-number" data-text="">4716 XXXX XXXX
                                         7554 </div>

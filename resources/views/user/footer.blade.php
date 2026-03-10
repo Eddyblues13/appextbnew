@@ -172,7 +172,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="pt-3 text-center">
-                <img src="{{ asset('uploads/1738445913_f45f5257f3ed5793bdc7.jpeg') }}" alt="image" class="imaged"
+                <img src="{{ asset('uploads/logo.png') }}" alt="image" class="imaged"
                     style="width:50px;height:50px;border-radius:50%">
             </div>
             <div class="modal-header pt-2">

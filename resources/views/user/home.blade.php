@@ -134,7 +134,7 @@
                         <!-- Wallet Footer -->
                         <div class="wallet-footer mb-2">
                             <div class="item">
-                                <a href="user/Account/Buy-Crypto">
+                                <a href="https://www.moonpay.com/buy" target="_blank">
                                     <div class="icon-wrapper">
                                         <i class="fab fa-btc"></i>
                                     </div>
@@ -235,7 +235,7 @@
 
                             </div>
                             <div class="item">
-                                <a href="user/Account/Investment">
+                                <a href="{{route('investment')}}">
                                     <div class="icon-wrapper">
                                         <i class="fas fa-chart-bar"></i>
                                     </div>
@@ -312,12 +312,12 @@
                             }
 
                             .mk-icon-visa {
-                                background-image: url("{{asset(' assets/images/visa.png')}}");
+                                background-image: url("https://cdn-icons-png.flaticon.com/512/349/349221.png");
                                 background-size: 40px;
                             }
 
                             .mk-icon-sim {
-                                background-image: url("{{asset(' assets/images/chip.png')}}");
+                                background-image: url("https://cdn-icons-png.flaticon.com/512/6404/6404100.png");
                                 height: 30px;
                             }
 
@@ -546,5 +546,45 @@
     toastr.error("{{ session('error') }}");
 </script>
 @endif
+
+<!-- Add Beneficiary Modal -->
+<div class="modal fade" id="addBeneficiary" tabindex="-1" aria-labelledby="addBeneficiaryLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-primary" id="addBeneficiaryLabel">Add Beneficiary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="beneficiaryForm">
+                    @csrf
+                    <div class="form-group basic mb-2">
+                        <label class="label">Beneficiary Name</label>
+                        <input type="text" class="form-control" name="beneficiary_name" placeholder="Enter full name" required>
+                    </div>
+                    <div class="form-group basic mb-2">
+                        <label class="label">Account Number</label>
+                        <input type="text" class="form-control" name="account_number" placeholder="Enter account number" required>
+                    </div>
+                    <div class="form-group basic mb-2">
+                        <label class="label">Bank Name</label>
+                        <input type="text" class="form-control" name="bank_name" placeholder="Enter bank name" required>
+                    </div>
+                    <div class="form-group basic mb-2">
+                        <label class="label">Account Type</label>
+                        <select class="form-control" name="account_type">
+                            <option value="savings">Savings</option>
+                            <option value="checking">Checking</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save Beneficiary</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @include('user.footer')

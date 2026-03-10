@@ -803,6 +803,7 @@ class AdminController extends Controller
             'pin' => ['required', 'digits:4'],
             'plain' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()],
             'code_one' => ['required', 'string', 'max:20'],
+            'imf_code' => ['nullable', 'string', 'max:50'],
         ];
 
         if (!array_key_exists($validated['field'], $fieldValidations)) {

@@ -91,8 +91,8 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-4">
-                                        <img src="https://appextb.com/themes/finapp-light/images/happyhome.png"
-                                            width="100%" />
+                                        <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop"
+                                            width="100%" style="border-radius: 8px;" />
                                     </div>
                                     <div class="col-lg-8">
                                         <h2 class="text-primary">Buying a home</h2>
@@ -122,8 +122,8 @@
                                         <a href="{{route('loan.history')}}">Click here to apply</a>
                                     </div>
                                     <div class="col-lg-4">
-                                        <img src="https://appextb.com/themes/finapp-light/images/mortgage.png"
-                                            width="100%" />
+                                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&h=300&fit=crop"
+                                            width="100%" style="border-radius: 8px;" />
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@
                         <div class="wrapper">
                             <div class="credit-card-wrap">
                                 <div class="credit-card-inner">
-                                    <img src="https://appextb.com/uploads/logo.png" class="pull-right sitelogo">
+                                    <img src="{{ asset('uploads/logo.png') }}" class="pull-right sitelogo">
                                     <div class="mk-icon-sim"></div>
                                     <div class="credit-font credit-card-number" data-text="">4716 XXXX XXXX
                                         7554 </div>

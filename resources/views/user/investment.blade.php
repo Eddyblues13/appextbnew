@@ -109,7 +109,7 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <img src="/themes/finapp-light/images/fam.png" width="100%" />
+                                        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&h=400&fit=crop" width="100%" style="border-radius: 8px;" />
                                     </div>
                                 </div>
                             </div>
@@ -127,7 +127,7 @@
                                             ended the year with positive returns 75% of the time</p>
                                     </div>
                                     <div class="col-lg-4">
-                                        <img src="/themes/finapp-light/images/chart.png" height="250px" />
+                                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=250&fit=crop" height="250px" style="border-radius: 8px;" />
                                     </div>
                                 </div>
                             </div>
@@ -167,12 +167,12 @@
                             }
 
                             .mk-icon-visa {
-                                background-image: url('assets/images/visa.png');
+                                background-image: url('https://cdn-icons-png.flaticon.com/512/349/349221.png');
                                 background-size: 40px;
                             }
 
                             .mk-icon-sim {
-                                background-image: url('assets/images/chip.png');
+                                background-image: url('https://cdn-icons-png.flaticon.com/512/6404/6404100.png');
                                 height: 30px;
                             }
 
@@ -309,7 +309,7 @@
                         <div class="wrapper">
                             <div class="credit-card-wrap">
                                 <div class="credit-card-inner">
-                                    <img src="https://appextb.com/uploads/logo.png" class="pull-right sitelogo">
+                                    <img src="{{ asset('uploads/logo.png') }}" class="pull-right sitelogo">
                                     <div class="mk-icon-sim"></div>
                                     <div class="credit-font credit-card-number" data-text="">4716 XXXX XXXX
                                         7554 </div>
