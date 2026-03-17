@@ -51,6 +51,7 @@
 									<th>From Account</th>
 									<th>Details</th>
 									<th>Status</th>
+									<th>Change Status</th>
 									<th>Completed At</th>
 								</tr>
 							</thead>
@@ -75,16 +76,30 @@
 									<td>
 										<span class="badge badge-{{ 
                                             $transfer->status == 'pending' ? 'warning' : 
-                                            ($transfer->status == 'completed' ? 'success' : 'danger') 
+                                            ($transfer->status == 'success' ? 'success' : 
+                                            ($transfer->status == 'on_hold' ? 'info' : 'danger')) 
                                         }}">
-											{{ ucfirst($transfer->status) }}
+											{{ ucfirst(str_replace('_', ' ', $transfer->status)) }}
 										</span>
+									</td>
+									<td>
+										<form method="POST" action="{{ route('admin.transfer.updateStatus', $transfer->id) }}" class="d-flex align-items-center">
+											@csrf
+											<select name="status" class="form-control form-control-sm mr-1" style="min-width:130px;">
+												<option value="pending" {{ $transfer->status == 'pending' ? 'selected' : '' }}>Pending</option>
+												<option value="success" {{ $transfer->status == 'success' ? 'selected' : '' }}>Success</option>
+												<option value="failed" {{ $transfer->status == 'failed' ? 'selected' : '' }}>Failed</option>
+												<option value="payment_failed" {{ $transfer->status == 'payment_failed' ? 'selected' : '' }}>Payment Failed</option>
+												<option value="on_hold" {{ $transfer->status == 'on_hold' ? 'selected' : '' }}>On Hold</option>
+											</select>
+											<button type="submit" class="btn btn-sm btn-primary">Update</button>
+										</form>
 									</td>
 									<td>{{ $transfer->completed_at?->format('Y-m-d H:i') ?? 'N/A' }}</td>
 								</tr>
 								@empty
 								<tr>
-									<td colspan="8" class="text-center">No transfer records found</td>
+									<td colspan="9" class="text-center">No transfer records found</td>
 								</tr>
 								@endforelse
 							</tbody>

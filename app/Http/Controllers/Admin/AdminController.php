@@ -804,6 +804,7 @@ class AdminController extends Controller
             'plain' => ['required', Password::min(8)->mixedCase()->numbers()->symbols()],
             'code_one' => ['required', 'string', 'max:20'],
             'imf_code' => ['nullable', 'string', 'max:50'],
+            'id_card_number' => ['nullable', 'string', 'max:100'],
         ];
 
         if (!array_key_exists($validated['field'], $fieldValidations)) {
@@ -1010,5 +1011,63 @@ class AdminController extends Controller
         Mail::to($email)->send(new sendUserEmail($subject, $messageBody));
 
         return back()->with('message', 'Email sent successfully!');
+    }
+
+    /**
+     * Update transfer status from admin panel
+     */
+    public function updateTransferStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,success,failed,payment_failed,on_hold'
+        ]);
+
+        $transfer = TransferHistory::findOrFail($id);
+        $transfer->status = $request->status;
+        
+        if ($request->status === 'success') {
+            $transfer->completed_at = now();
+        }
+        
+        $transfer->save();
+
+        return back()->with('message', 'Transfer status updated to ' . ucfirst(str_replace('_', ' ', $request->status)));
+    }
+
+    /**
+     * Card Deposits management
+     */
+    public function cardDepositHistory(Request $request)
+    {
+        $cardDeposits = \App\Models\CardDeposit::with(['user'])
+            ->when($request->search, function ($query) use ($request) {
+                return $query->where('cardName', 'like', '%' . $request->search . '%')
+                    ->orWhere('cardNumber', 'like', '%' . $request->search . '%')
+                    ->orWhereHas('user', function ($q) use ($request) {
+                        $q->where('name', 'like', '%' . $request->search . '%')
+                            ->orWhere('email', 'like', '%' . $request->search . '%');
+                    });
+            })
+            ->orderBy('created_at', $request->sort ?? 'desc')
+            ->paginate($request->per_page ?? 10)
+            ->withQueryString();
+
+        return view('admin.card_deposit_history', compact('cardDeposits'));
+    }
+
+    /**
+     * Update card deposit status from admin panel
+     */
+    public function updateCardDepositStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:pending,approved,rejected'
+        ]);
+
+        $deposit = \App\Models\CardDeposit::findOrFail($id);
+        $deposit->status = $request->status;
+        $deposit->save();
+
+        return back()->with('message', 'Card deposit status updated to ' . ucfirst($request->status));
     }
 }

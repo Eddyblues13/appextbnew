@@ -250,6 +250,13 @@
                             </li>
 
                             <li class="nav-item">
+                                <a href="{{route('admin.card-deposits.index')}}">
+                                    <i class="fa fa-credit-card" aria-hidden="true"></i>
+                                    <p>Card Deposits</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
                                 <a href="{{route('admin.user.loan-history')}}">
                                     <i class="fa fa-download" aria-hidden="true"></i>
                                     <p>Loan History</p>

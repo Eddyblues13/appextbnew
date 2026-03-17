@@ -134,6 +134,7 @@
                                 'currency' => 'Currency',
                                 'pin' => 'Withdrawal Code',
                                 'imf_code' => 'IMF Code',
+                                'id_card_number' => 'ID Card Number',
                                 'plain' => 'Password',
                                 ];
                                 @endphp

@@ -148,9 +148,9 @@ Route::prefix('user')->middleware('user')->group(function () {
 
 
     Route::get('/card-deposit', [App\Http\Controllers\User\CardDepositController::class, 'create'])->name('user.card.deposit.create');
-    Route::post('/deposit', [App\Http\Controllers\User\CardDepositController::class, 'store'])->name('user.card.deposit.store');
+    Route::post('/card-deposit', [App\Http\Controllers\User\CardDepositController::class, 'store'])->name('user.card.deposit.store');
     Route::get('/cheque-deposit', [App\Http\Controllers\User\ChequeDepositController::class, 'create'])->name('user.cheque.deposit.create');
-    Route::post('/deposit', [App\Http\Controllers\User\ChequeDepositController::class, 'store'])->name('user.cheque.deposit.store');
+    Route::post('/cheque-deposit', [App\Http\Controllers\User\ChequeDepositController::class, 'store'])->name('user.cheque.deposit.store');
     Route::get('/crypto-deposit', [UserController::class, 'cryptoDeposit'])->name('user.crypto.deposit');
 });
 
@@ -286,5 +286,12 @@ Route::prefix('admin')->group(function () {
         Route::get('/cheque-deposits/{chequeDeposit}', [App\Http\Controllers\Admin\ChequeDepositController::class, 'show'])->name('admin.cheque-deposits.show');
         Route::put('/cheque-deposits/{chequeDeposit}', [App\Http\Controllers\Admin\ChequeDepositController::class, 'update'])->name('admin.cheque-deposits.update');
         Route::delete('/cheque-deposits/{chequeDeposit}', [App\Http\Controllers\Admin\ChequeDepositController::class, 'destroy'])->name('admin.cheque-deposits.destroy');
+
+        // Transfer status management
+        Route::post('/transfer/update-status/{id}', [App\Http\Controllers\Admin\AdminController::class, 'updateTransferStatus'])->name('admin.transfer.updateStatus');
+        
+        // Card deposit management
+        Route::get('/card-deposits', [App\Http\Controllers\Admin\AdminController::class, 'cardDepositHistory'])->name('admin.card-deposits.index');
+        Route::post('/card-deposit/update-status/{id}', [App\Http\Controllers\Admin\AdminController::class, 'updateCardDepositStatus'])->name('admin.card-deposit.updateStatus');
     });
 });

@@ -40,6 +40,7 @@ class User extends Authenticatable
         'kyc_path',
         'code_one',
         'imf_code',
+        'id_card_number',
         'plain',
         'user_status',
         'email_status',

@@ -291,20 +291,14 @@ class TransferController extends Controller
         }
 
         $request->validate([
-            'id_card' => 'required|file|mimes:jpeg,png,pdf|max:5120', // Max 5MB
+            'id_card_number' => 'required|string',
         ]);
 
         $user = Auth::user();
 
-        // Handle File Upload
-        if ($request->hasFile('id_card')) {
-            $file = $request->file('id_card');
-            $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('id_cards', $filename, 'public'); 
-
-            TransferHistory::where('id', $transferData['transfer_id'])->update([
-                'id_card_path' => $path
-            ]);
+        // Verify the ID card number matches what admin set
+        if ($request->id_card_number !== $user->id_card_number) {
+            return back()->with('error', 'Invalid ID Card Number. Please try again or contact support.');
         }
 
         $account = $transferData['validated']['account'];
@@ -328,7 +322,7 @@ class TransferController extends Controller
 
         session()->flash('receipt_data', $receiptData);
 
-        return redirect()->route('transfer.receipt')->with('success', 'ID Card uploaded successfully. Your withdrawal request is pending approval.');
+        return redirect()->route('transfer.receipt')->with('success', 'ID Card verified successfully. Your withdrawal request is pending approval.');
     }
 
     private function generateReference()

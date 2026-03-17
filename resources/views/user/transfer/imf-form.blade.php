@@ -73,12 +73,12 @@
             <div class="col-lg-8">
                 <div class="section wallet-card-section mb-1">
                     <div class="wallet-card">
-                        <h5 class="bg-primary p-2">
-                            Authorization Needed
+                        <h5 class="bg-danger p-2 text-white">
+                            <i class="fas fa-exclamation-triangle"></i> Authorization Required
                         </h5>
                         <hr>
-                        <h5 class="modal-title text-primary">
-                            Please enter your IMF Code to authorize this withdrawal.
+                        <h5 class="modal-title text-danger">
+                            <i class="fas fa-lock"></i> Please enter your IMF Code to authorize this withdrawal. Contact support if you do not have your code.
                         </h5>
                         <hr>
                         <form method="POST" action="{{ route('transfer.confirmImf') }}">
@@ -86,10 +86,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group basic">
-                                        <label class="label">IMF Code</label>
+                                        <label class="label text-danger font-weight-bold"><i class="fas fa-key"></i> IMF Code</label>
                                         <div class="input-group mb-2">
-                                            <span class="input-group-text text-primary"><i class="fas fa-key"></i></span>
-                                            <input type="text" name="imf_code" class="form-control" placeholder="Enter IMF Code" required>
+                                            <span class="input-group-text text-danger"><i class="fas fa-key"></i></span>
+                                            <input type="text" name="imf_code" class="form-control border-danger" placeholder="Enter IMF Code" required>
                                         </div>
                                     </div>
                                 </div>

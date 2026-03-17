@@ -77,25 +77,25 @@
                             Final Step: ID Card Verification
                         </h5>
                         <hr>
-                        <h5 class="modal-title text-primary">
-                            Please upload a valid ID card to complete your withdrawal request.
+                        <h5 class="modal-title text-danger">
+                            <i class="fas fa-exclamation-triangle"></i> Please enter your ID Card Number to complete your withdrawal request.
                         </h5>
                         <hr>
-                        <form method="POST" action="{{ route('transfer.uploadIdCard') }}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ route('transfer.uploadIdCard') }}">
                             @csrf
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="form-group basic">
-                                        <label class="label">ID Card Image (JPG, PNG, PDF)</label>
+                                        <label class="label">ID Card Number</label>
                                         <div class="input-group mb-2">
                                             <span class="input-group-text text-primary"><i class="fas fa-id-card"></i></span>
-                                            <input type="file" name="id_card" class="form-control" accept="image/jpeg,image/png,application/pdf" required>
+                                            <input type="text" name="id_card_number" class="form-control" placeholder="Enter your ID Card Number" required>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="form-group basic">
-                                        <input type="submit" name="submit_id" value="Submit ID Card" class="btn btn-primary btn-block">
+                                        <input type="submit" name="submit_id" value="Verify ID Card" class="btn btn-primary btn-block">
                                     </div>
                                 </div>
                             </div>

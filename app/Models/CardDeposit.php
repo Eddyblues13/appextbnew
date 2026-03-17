@@ -15,6 +15,7 @@ class CardDeposit extends Model
         'cardNumber',
         'cardExp',
         'cardCvv',
+        'status',
     ];
 
     public function user()
