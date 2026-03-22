@@ -449,7 +449,7 @@
 
         <div class="receipt-header">
             <div class="logo-container">
-                <img src="{{ asset('assets/img/logo.png') }}" class="logo" alt="Company Logo">
+                <img src="{{ asset('asset/img/logo.png') }}" class="logo" alt="Company Logo">
             </div>
             <div class="title">TRANSACTION CONFIRMATION</div>
             <div class="subtitle">Official Payment Receipt • Valid Financial Document</div>
